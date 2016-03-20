@@ -17,7 +17,7 @@ app.debug = DEBUG
 
 @app.route("/")
 def index():
-    return make_response(render_template('index.html', hello='Hello World!'))
+    return make_response(render_template('index.html'))
 
 
 @app.route("/crawl", methods=['GET'])

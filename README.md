@@ -75,6 +75,6 @@ Problems, todos and tradeoffs
     for url in BeautifulSoup(data).findAll("loc"):
         print url.text
 )
-- allow deploying to Amazon AWS
 - qa: more exhaustive unit tests
 - handle GET parameters. They're ignored at the moment.
+- allow deploying to Amazon AWS. `make deploy` doesn't do that and runs non debug version locally instead

@@ -21,5 +21,7 @@ clean:
 	-docker-compose kill && docker ps -a | grep simplewebcrawler_webcrawler | awk '{print $$1}' | xargs docker rm -fv
 	-docker rmi "simplewebcrawler_webcrawler"
 
-deploy: clean build test
+deploy: clean
+	docker-compose --file docker-compose-prod.yml build
 	@echo "TODO: Actually deploy"
+	docker-compose --file docker-compose-prod.yml up -d
