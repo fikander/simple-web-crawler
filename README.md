@@ -23,9 +23,11 @@ To start Docker container and server on default port 8080 (make sure docker mach
 
 This will build the Docker image if necessary and start it.
 
-By default logs Docker volume is mounted at `~/logs/simple-web-crawler` (as defined in docker-compose.yml). To view server log use `tail -f ~/logs/simple-web-crawler/serverl.log`
+By default logs Docker volume is mounted at `~/logs/simple-web-crawler` (as defined in docker-compose.yml). To view server log use
 
-To stop the container:
+    tail -f ~/logs/simple-web-crawler/server.log
+
+To stop the web service:
 
     make stop
 
