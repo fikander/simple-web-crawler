@@ -40,8 +40,6 @@ def client(request):
 		<a href="http://external.com">
 		''', status=200
 	)
-
-
 	yield client
 	# TODO: any teardown code
 

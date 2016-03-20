@@ -32,7 +32,8 @@ To stop the container:
 Testing
 -------
 
-Run
+Run:
+
     make test
 
 to execute unit/integration tests.
@@ -41,10 +42,10 @@ to execute unit/integration tests.
 Endpoints
 ---------
 
-    \crawl?url=URL_TO_START_CRAWLING
+    /crawl?url=URL_TO_START_CRAWLING
 
-This will crawl URL_TO_START_CRAWLING page and recursively follow all the links from it while staying within the domain.
-Returns JSON results.
+This will crawl URL_TO_START_CRAWLING page and recursively follow all the links from it while staying within the domain. Returns JSON results.
+
 Example:
 
     curl "`docker-machine ip`:8080/crawl?depth=1&url=http://google.com"
@@ -58,17 +59,16 @@ On OSX or Windows you can access simple web interface at:
 
     `docker-machine ip`:8080
 
-(Make sure that port 8080 is available, otherwise edit docker-compose.yml to change it.)
+(Make sure that port 8080 is available, otherwise edit `docker-compose.yml` to change it.)
 
 
 Problems, todos and tradeoffs
 -----------------------------
 
-- generate documentation
 - performance: handle GET parameters better, allow their configuration (url params are stripped at the momement)
 - performance: multithreading
-- configuration: depth limit
-- scale: microservices architecture with threaded queue consumers 
+- performance: do not block on `/crawl` request. Return immediately and start job in the background. Crawling can take hours.
+- scale: microservices architecture with threaded queue consumers
 - ui: use React and websockets to get live feedback while crawling
 - performance: check for sitemap.xml and parse that first
 (should be simple
@@ -76,5 +76,5 @@ Problems, todos and tradeoffs
         print url.text
 )
 - qa: more exhaustive unit tests
-- handle GET parameters. They're ignored at the moment.
-- allow deploying to Amazon AWS. `make deploy` doesn't do that and runs non debug version locally instead
+- qa: generate documentation
+- deploy: allow deploying to Amazon AWS. `make deploy` doesn't do that and runs non debug version locally instead
