@@ -1,0 +1,16 @@
+CherryPy==4.0.0
+Flask==0.10.1
+Flask-SQLAlchemy==2.1
+Jinja2==2.8
+requests==2.9.1
+SQLAlchemy==1.0.11
+Werkzeug==0.11.3
+Paste==2.0.2
+six==1.10.0
+beautifulsoup4==4.4.1
+
+# Required only for tests
+# TODO: Don't install for production
+pytest==2.9.1
+pytest-localserver==0.3.5
+responses==0.5.1

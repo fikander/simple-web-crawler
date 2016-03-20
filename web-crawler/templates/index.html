@@ -1,0 +1,61 @@
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+	<script>
+	$(document).ready(function() {
+		$('#start-crawl').click(function(){
+			$("#results").text("Crawling...");
+			$.ajax({
+				url: '/crawl?url=' + $('#url').val() + '&depth=' + $('#depth').val(),
+				type: 'GET',
+				dataType: 'json',
+				success: function(data) {
+					$("#results").text(JSON.stringify(data, null, 2));
+				},
+				error: function(xhr, textStatus) {
+					$("#results").text(textStatus + ": " + xhr.responseText);
+				}
+			});
+		});
+	});
+	</script>
+</head>
+
+<body>
+
+	<div class="container">
+
+	<div class="row">
+		<form class="navbar-form navbar-left">
+		  <div class="form-group">
+		    <label for="exampleInputName2">URL</label>
+		    <input id="url" type="text" class="form-control" placeholder="Example: http://httpbin.org/html">
+		  </div>
+		  <div class="form-group">
+		    <label for="exampleInputName2">Depth</label>
+		    <input id="depth" type="text" class="form-control" placeholder="Enter number">
+		  </div>
+		  <button id="start-crawl" class="btn btn-default" type="button">Crawl</button>
+		</form>
+	</div>
+
+	<div class="row">
+		<pre id="results"></pre>
+	</div>
+
+	</div>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

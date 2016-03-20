@@ -1,0 +1,12 @@
+version: '2'
+services:
+    webcrawler:
+        build: .
+        environment:
+            - WEBCRAWLER_DEBUG=true
+        restart: always
+        ports:
+            - "8080:8080"
+        volumes:
+            - ~/logs/simple-web-crawler:/logs
+            - ~/Development/fikander/simple-web-crawler/web-crawler:/web-crawler
