@@ -8,7 +8,7 @@ from mimetypes import MimeTypes
 from flask import Flask, make_response, abort, request, jsonify, render_template
 from bs4 import BeautifulSoup
 
-DEBUG = os.environ['WEBCRAWLER_DEBUG'] if 'WEBCRAWLER_DEBUG' in os.environ else None
+DEBUG = os.environ['WEBCRAWLER_DEBUG'] if 'WEBCRAWLER_DEBUG' in os.environ else False
 logging.getLogger().setLevel(logging.DEBUG if DEBUG else logging.INFO)
 
 app = Flask(__name__)
@@ -53,7 +53,9 @@ class Crawler:
         None,
         'text/html',
         'text/plain',
-        'application/x-msdos-program'
+        'text/x-perl',
+        'application/x-msdos-program',
+        'application/x-info'
     )
 
 
