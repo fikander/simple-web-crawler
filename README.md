@@ -46,9 +46,10 @@ Endpoints
 
     /crawl?threads=THREADS_COUNT&depth=MAX_DEPTH&url=URL_TO_START_CRAWLING
 
-This will crawl `URL_TO_START_CRAWLING` page and recursively follow all the links from it while staying within the domain.
-`THREADS_COUNT` is number of worker threads per request (1 by default). `WEBCRAWLER_MAX_THREADS` environment variable limits max number of threads.
-`MAX_DEPTH` is the crawling depth (1 by default). Value of 0 will not follow any links. 
+- `URL_TO_START_CRAWLING` crawl starting with this URL, recursively follow all the links from it while staying within the domain.
+- `THREADS_COUNT` is number of worker threads per request (1 by default). `WEBCRAWLER_MAX_THREADS` environment variable limits max number of threads.
+- `MAX_DEPTH` is the crawling depth (1 by default). Value of 0 will not follow any links. 
+
 Returns JSON results.
 
 Example:
