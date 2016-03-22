@@ -12,34 +12,6 @@ def client(request):
 	with webcrawler.app.app_context():
 		# TODO: any db init code
 		pass
-	responses.add(
-		responses.GET, 'http://test.me/circular1',
-		body='''
-		<html><body>
-			<a href="/circular2"/>
-			<a href="/circular1"/>
-		</body></html>
-		''', status=200
-	)
-	responses.add(
-		responses.GET, 'http://test.me/circular2',
-		body='''
-		<html><body><a href="/circular1"/></body></html>
-		''', status=200
-	)
-
-	responses.add(
-		responses.GET, 'https://test.me/https',
-		body='''
-		<a href="http://test.me/http">
-		''', status=200
-	)
-	responses.add(
-		responses.GET, 'http://test.me/http',
-		body='''
-		<a href="http://external.com">
-		''', status=200
-	)
 	yield client
 	# TODO: any teardown code
 
@@ -65,6 +37,22 @@ def test_weird_scheme(client):
 
 @responses.activate
 def test_circular_links(client):
+	responses.add(
+		responses.GET, 'http://test.me/circular1',
+		body='''
+		<html><body>
+			<a href="/circular2"/>
+			<a href="/circular1"/>
+		</body></html>
+		''', status=200
+	)
+	responses.add(
+		responses.GET, 'http://test.me/circular2',
+		body='''
+		<html><body><a href="/circular1"/></body></html>
+		''', status=200
+	)
+
 	rv, resp = crawl(client, 'http://test.me/circular1')
 	assert('http://test.me/circular1' in resp)
 	assert('http://test.me/circular2' in resp)
@@ -73,6 +61,18 @@ def test_circular_links(client):
 
 @responses.activate
 def test_http_https_redirection(client):
+	responses.add(
+		responses.GET, 'https://test.me/https',
+		body='''
+		<a href="http://test.me/http">
+		''', status=200
+	)
+	responses.add(
+		responses.GET, 'http://test.me/http',
+		body='''
+		<a href="http://external.com">
+		''', status=200
+	)
 	# TODO: Mock https connection to enable test 
 	# rv, resp = crawl(client, 'https://test.me/https')
 	# assert('http://external.com' in resp)
@@ -146,6 +146,16 @@ def test_images(client):
 		<img src="img1.gif">
 		<img src="img2.jpeg">
 		''', status=200
+	)
+	responses.add(
+		responses.GET, 'http://test.me/img1.gif',
+		body='''
+		''', content_type='image/gif', status=200
+	)
+	responses.add(
+		responses.GET, 'http://test.me/img2.jpeg',
+		body='''
+		''', content_type='image/jpg', status=200
 	)
 
 	rv, resp = crawl(client, 'http://test.me/images')

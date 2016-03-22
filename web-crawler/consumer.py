@@ -13,14 +13,12 @@ class QueueConsumer(threading.Thread):
     _followable_content_types = (
         None,
         'text/html',
-        'text/plain',
-        'application/x-msdos-program'
+        'text/plain'
     )
 
     """docstring for ClassName"""
-    def __init__(self, thread_id, queue, crawled, allowed_domains, depth_limit):
-        super().__init__()
-        self.thread_id = thread_id
+    def __init__(self, queue, crawled, allowed_domains, depth_limit):
+        super().__init__(daemon=True)
         self.queue = queue
         self.crawled = crawled
         self.allowed_domains = allowed_domains
@@ -29,17 +27,16 @@ class QueueConsumer(threading.Thread):
 
 
     def run(self):
-        logging.error(str(self.thread_id) + ": starting")
         while True:
             try:
-                logging.info(str(self.thread_id) + 'retrieving next item from queue...')
+                logging.debug(self.name + ': awaiting next item...')
                 url, depth = self.queue.get()
                 if url is None:
+                    logging.debug(self.name + ': exiting')
                     break
             except queue.Empty:
-                logging.info(str(self.thread_id) + ': nothing to work on')
+                logging.debug(self.name + ': nothing to work on - exiting')
                 break
-            logging.info(str(self.thread_id) + ': processing: ' + url)  # do work
             self._process(url, depth)
             self.count += 1
             self.queue.task_done()
@@ -49,12 +46,11 @@ class QueueConsumer(threading.Thread):
         follow, base_url = self._qualify_link(url)
         if follow:
             logging.debug('following ' + url)
+            content_type = None
             try:
                 r = requests.get(url)
                 if 'content-type' in r.headers:
                     content_type = r.headers['content-type'].split(';')[0]
-                else:
-                    content_type = None
                 with self.crawled as c:
                     c[url] = {
                         'outlinks': dict(),  # will remain empty for external pages
@@ -65,6 +61,11 @@ class QueueConsumer(threading.Thread):
                 else:
                     logging.debug('NOT parsing this content-type: ' + content_type)
             except requests.exceptions.RequestException as e:
+                with self.crawled as c:
+                    c[url] = {
+                        'outlinks': dict(),
+                        'type': content_type
+                    }
                 logging.debug('Connection error: ' + str(e))
         else:
             with self.crawled as c:
@@ -78,7 +79,7 @@ class QueueConsumer(threading.Thread):
         """Extract all the links and media and add them to links queue.
         TODO: Perform any extra processing on the content, e.g. indexing.
         """
-        logging.info("Parsing " + url + " depth: " + str(depth))
+        logging.debug("Parsing " + url + " depth: " + str(depth))
         # find all links
         # TODO: be more intelligent with guessing content type - assuming html5 at the moment
         soup = BeautifulSoup(content, 'html5lib')
