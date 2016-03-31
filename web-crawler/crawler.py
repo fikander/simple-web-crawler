@@ -29,7 +29,7 @@ class Crawler:
             )
         for consumer in self.queue_consumers:
             consumer.start()
-        # wait for queue and terminate all threads
+        # wait for queue to get empty and terminate all threads
         self.queue.join()
         for i in range(self.max_threads):
             self.queue.put((None, 0))

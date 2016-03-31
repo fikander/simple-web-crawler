@@ -72,7 +72,6 @@ Problems, todos and tradeoffs
 -----------------------------
 
 - performance: handle GET parameters better, allow their configuration (url params are stripped at the momement)
-- performance: multithreading
 - performance: do not block on `/crawl` request. Return immediately and start job in the background. Crawling can take hours.
 - scale: microservices architecture with threaded queue consumers
 - ui: use React and websockets to get live feedback while crawling

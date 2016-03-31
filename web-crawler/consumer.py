@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 
 
 class QueueConsumer(threading.Thread):
+    """Processes queue of urls which updating dict of crawled urls.
+    """
 
     _followable_content_types = (
         None,
@@ -16,7 +18,6 @@ class QueueConsumer(threading.Thread):
         'text/plain'
     )
 
-    """docstring for ClassName"""
     def __init__(self, queue, crawled, allowed_domains, depth_limit):
         super().__init__(daemon=True)
         self.queue = queue
